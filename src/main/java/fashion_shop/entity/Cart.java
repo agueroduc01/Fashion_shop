@@ -14,17 +14,17 @@ import javax.persistence.Table;
 public class Cart {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "Id", nullable = false)
+	@Column(name = "ID", nullable = false)
 	private Integer id;
 
-	@Column(name = "username", nullable = false)
+	@Column(name = "Username", nullable = false)
 	private String username;
 
 	@ManyToOne
 	@JoinColumn(name="ProductID")
 	private Product product;
 
-	@Column(name = "quantity", nullable = false)
+	@Column(name = "Quantity", nullable = false)
 	private Integer quantity;
 
 	public Cart() {

@@ -92,14 +92,14 @@
         <div class="main-content" >
             <form method="post">
 	            <div class="row">
-	                <div class="col-4 image">
+	                <div class="col-4 image" style="height: 430px;">
 	                    <div class="cloth-temp">
 	                        <i class="fa-solid fa-cloud-arrow-down"></i>
 	                    </div>
 	                </div>
 	            
 	                <div class="col-8">
-	                    <div class="row info" style="height: 430px; ">
+	                    <div class="row info" style="position: relative;">
 	                        <div class="col-6 field id">
 	                            <label for="">ID:</label>
 	                            <input type="text" name="ID" placeholder="Type ID here..." > 
@@ -135,13 +135,37 @@
 	                            <label for="">Image source:</label>
 	                            <input type="text" name="image" id="" placeholder="Type image source here...">
 	                        </div>
-	
+	                        
+	                        <div class="col-6 field">
+	                        	<label for="">Brand:</label>
+	                        	<input type="text" name="brand" id="" placeholder="Type brand here...">
+	                        </div>
+	                        
+	                        <div class="col-6 field">
+	                        	<label for="">Gender:</label>
+	                        	<input type="text" name="gender" id="" placeholder="Type gender here...">
+	                        </div>
+	                        
+	                        <div class="col-6 field">
+	                        	<label for="">Release Time:</label>
+	                        	<input type="date" name="releaseTime" id="" placeholder="Type release time here...">
+	                        </div>
+	                        
+	                        <div class="col-6 field">
+	                        	<label for="">Product Type:</label>
+	                        	<input type="text" name="productType" id="" placeholder="Type product type here...">
+	                        </div>
+	                        
+	                        <div class="col-6 field" style="position: relative;">
+	                        	<label for="">Product Material:</label>
+	                        	<input type="text" name="material" id="" placeholder="Type product Material here...">
+	                        </div>
+           				<button class="col-6 btn" style="bottom: -40px;">Add product</button>
 	                    </div>
 	                </div>
 	            </div>
 	
 	            
-	            <button class="col-6 btn">Add product</button>
 	            
             </form>
             

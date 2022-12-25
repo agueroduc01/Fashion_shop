@@ -19,6 +19,30 @@ import org.springframework.format.annotation.DateTimeFormat;
 @Entity
 @Table(name = "Account")
 public class Account {
+	@Column(name = "ID")
+	private int ID;
+	
+	public Account() {
+		super();
+		// TODO Auto-generated constructor stub
+	}
+
+	public Account(int iD, String user_name, String password, String fullname, String email, Boolean gender,
+			String image, Date birthday, String phone, String address, Role role) {
+		super();
+		ID = iD;
+		this.user_name = user_name;
+		this.password = password;
+		this.fullname = fullname;
+		this.email = email;
+		this.gender = gender;
+		this.image = image;
+		this.birthday = birthday;
+		this.phone = phone;
+		this.address = address;
+		this.role = role;
+	}
+
 	@Id
 	@Column(name = "Username")
 	private String user_name;
@@ -52,16 +76,16 @@ public class Account {
 	@JoinColumn(name = "Role")
 	private Role role;
 	
-	@OneToMany(mappedBy = "emails", fetch = FetchType.EAGER)
-	private Collection<Account> emails;
-	
-	public Collection<Account> getEmails() {
-		return emails;
-	}
-
-	public void setEmails(Collection<Account> emails) {
-		this.emails = emails;
-	}
+//	@OneToMany(mappedBy = "emails", fetch = FetchType.EAGER)
+//	private Collection<Account> emails;
+//	
+//	public Collection<Account> getEmails() {
+//		return emails;
+//	}
+//
+//	public void setEmails(Collection<Account> emails) {
+//		this.emails = emails;
+//	}
 
 	public Role getrole() {
 		return role;
@@ -141,5 +165,28 @@ public class Account {
 
 	public void setGender(Boolean gender) {
 		this.gender = gender;
+	}
+
+	public int getID() {
+		return ID;
+	}
+
+	public void setID(int iD) {
+		ID = iD;
+	}
+
+	public Role getRole() {
+		return role;
+	}
+
+	public void setRole(Role role) {
+		this.role = role;
+	}
+
+	@Override
+	public String toString() {
+		return "Account [ID=" + ID + ", user_name=" + user_name + ", password=" + password + ", fullname=" + fullname
+				+ ", email=" + email + ", gender=" + gender + ", image=" + image + ", birthday=" + birthday + ", phone="
+				+ phone + ", address=" + address + ", role=" + role + "]";
 	}
 }

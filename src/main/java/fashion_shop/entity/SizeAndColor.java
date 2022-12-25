@@ -2,6 +2,7 @@ package fashion_shop.entity;
 
 import java.io.Serializable;
 
+import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
@@ -13,7 +14,7 @@ public class SizeAndColor {
 	@EmbeddedId
 	private PK pk ;
 	
-
+	@Column(name = "Quantity")
 	private Integer quantity;
 	
 	@Embeddable
@@ -21,8 +22,11 @@ public class SizeAndColor {
 		
 		private static final long serialVersionUID = 1L;
 		
+		@Column(name = "ProductID")
 		private String productID;
+		@Column(name = "Size")
 		private String size;
+		@Column(name = "Color")
 		private String color;
 		
 		public String getProductID() {

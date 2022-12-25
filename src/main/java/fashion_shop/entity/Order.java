@@ -27,17 +27,17 @@ public class Order {
 	@OneToMany(mappedBy = "idOrder", fetch = FetchType.EAGER)
 	private Collection<OrderDetail> details;
 	
-	@ManyToOne
-	@JoinColumn(name = "Cus_email")
-	private Account emails;
+//	@ManyToOne
+//	@JoinColumn(name = "Cus_email")
+//	private Account emails;
 	
-	public Account getEmails() {
-		return emails;
-	}
-
-	public void setEmails(Account emails) {
-		this.emails = emails;
-	}
+//	public Account getEmails() {
+//		return emails;
+//	}
+//
+//	public void setEmails(Account emails) {
+//		this.emails = emails;
+//	}
 
 	public Integer getId_order() {
 		return id_order;

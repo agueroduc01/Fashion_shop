@@ -23,11 +23,11 @@ public class OrderDetail {
 	private Integer quantity;
 	
 	@ManyToOne
-	@JoinColumn(name = "ID_order")
+	@JoinColumn(name = "IDOrder")
 	private Order idOrder;
 	
 	@ManyToOne 
-	@JoinColumn(name = "ID_product")
+	@JoinColumn(name = "IDProduct")
 	private Product prod;
 	
 	public Integer getId_detail() {

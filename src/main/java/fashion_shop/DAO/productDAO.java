@@ -1,7 +1,13 @@
 package fashion_shop.DAO;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.transaction.Transactional;
 
@@ -9,11 +15,13 @@ import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
+import org.hibernate.cfg.Environment;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import fashion_shop.entity.Product;
 import fashion_shop.entity.ProductCategory;
+import fashion_shop.entity.Rating;
 import fashion_shop.entity.SizeAndColor;
 import fashion_shop.entity.SizeAndColor.PK;
 
@@ -43,6 +51,48 @@ public class productDAO {
 		Query query = session.createQuery(hql);
 		List<Product> listProd = query.list();
 		return listProd;
+	}
+	
+	public List<Product> getProductsByCluster(String id) throws IOException, InterruptedException {
+		Session session = factory.getCurrentSession();
+		Product currentProduct = (Product) session.get(Product.class, id);
+		String hql = String.format("from Product where id != %s and productCluster = %d and ProdCategory.idCategory = %d", 
+				currentProduct.getIdProduct(), 
+				currentProduct.getProductCluster(),
+				currentProduct.getProductCategory().getIdCategory());
+		Query query = session.createQuery(hql);
+		List<Product> listProd = query.list();
+		listProd.sort(new Comparator<Product>() {
+
+			@Override
+			public int compare(Product o1, Product o2) {
+				Double avgRating1 = 0.0;
+				if (o1.getRatings().size() != 0) {
+					for (Rating rating : o1.getRatings()) {
+						avgRating1 += rating.getRating();
+					}
+					avgRating1 /= o1.getRatings().size();
+				}
+				Double avgRating2 = 0.0;
+				if (o2.getRatings().size() != 0) {
+					for (Rating rating : o2.getRatings()) {
+						avgRating2 += rating.getRating();
+					}
+					avgRating2 /= o2.getRatings().size();
+				}
+				return avgRating1.compareTo(avgRating2);
+			}
+		});
+		Process p = Runtime.getRuntime().exec("C:/Users/THANHTRUNG/miniconda3/envs/tf-gpu/python.exe \"c:/Users/THANHTRUNG/OneDr\r\n"
+				+ "ive - student.ptithcm.edu.vn/Desktop/eclipse_workspace/do-an-phat-trien-cac-he-thong-thong-minh/kmeans-clustering.py\"");
+		BufferedReader in = new BufferedReader(new InputStreamReader(p.getInputStream()));
+		String line;
+		while ((line = in.readLine()) != null) {
+		    System.out.println(line);
+		}
+		p.waitFor();
+		System.out.println("ok!");
+		return listProd.subList(0, 20);
 	}
 	
 	
@@ -80,6 +130,30 @@ public class productDAO {
 		list.add("Yellow");
 		
 		return list;
+	}
+	
+	public List<String> getLBrand() {
+		List<String> list = new ArrayList<String>();
+		list.add("Nike");
+		list.add("Louis Vuitton");
+		list.add("GUCCI");
+		list.add("Chanel");
+		list.add("Adidas");
+		list.add("Hermes");
+		list.add("ZARA");
+		list.add("H&M");
+		list.add("Cartier");
+		list.add("Dior");
+		list.add("UNIQLO");
+		
+		return list;
+	}
+	
+	public Map<Integer, String> getHMGender() {
+		Map<Integer, String> map = new HashMap<Integer, String>();
+		map.put(0, "Nu");
+		map.put(1, "Nam");
+		return map;
 	}
 	
 	public boolean saveProduct( Product prod) {

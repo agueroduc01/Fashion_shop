@@ -134,6 +134,31 @@
 	                            <label for="">Image source:</label>
 	                            <input name="image" type="text" value="${p.image }" >
 	                        </div>
+	                        
+	                        <div class="col-6 field">
+	                            <label for="">Brand:</label>
+	                            <input name="brand" type="text" value="${p.brand }" >
+	                        </div>
+	                        
+	                        <div class="col-6 field">
+	                            <label for="">Gender:</label>
+	                            <input name="gender" type="text" value="${p.gender }" >
+	                        </div>
+	                        
+	                        <div class="col-6 field">
+	                            <label for="">Release Time:</label>
+	                            <input name="releaseTime" type="date" value="${p.releaseTime }" >
+	                        </div>
+	                        
+	                        <div class="col-6 field">
+	                            <label for="">Product Type:</label>
+	                            <input name="productType" type="text" value="${p.productType }" >
+	                        </div>
+	                        
+	                        <div class="col-6 field">
+	                            <label for="">Product Material:</label>
+	                            <input name="material" type="text" value="${p.material }" >
+	                        </div>
 	
 	                    </div>
 	                </div>
