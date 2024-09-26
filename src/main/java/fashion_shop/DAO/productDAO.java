@@ -1,7 +1,17 @@
 package fashion_shop.DAO;
 
+import java.io.BufferedReader;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.transaction.Transactional;
 
@@ -9,13 +19,22 @@ import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
+import org.hibernate.cfg.Environment;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.gson.Gson;
+
 import fashion_shop.entity.Product;
 import fashion_shop.entity.ProductCategory;
+import fashion_shop.entity.Rating;
 import fashion_shop.entity.SizeAndColor;
 import fashion_shop.entity.SizeAndColor.PK;
+import fashion_shop.model.APIResult;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
 
 @Transactional
 @Repository
@@ -43,6 +62,50 @@ public class productDAO {
 		Query query = session.createQuery(hql);
 		List<Product> listProd = query.list();
 		return listProd;
+	} 
+	
+	public List<Product> getProductsByCluster(String id, String sessionId) throws IOException, InterruptedException {
+		String url = "http://localhost:8000/get-history-cluster/"+sessionId;
+		OkHttpClient client = new OkHttpClient();
+		  Request request = new Request.Builder()
+		      .url(url)
+		      .build();
+	
+		  Response response = client.newCall(request).execute();
+		  Gson gson = new Gson();
+		  APIResult result = gson.fromJson(response.body().string(), APIResult.class);
+		  System.out.println(result.toString());
+		
+		Session session = factory.getCurrentSession();
+		Product currentProduct = (Product) session.get(Product.class, id);
+		String hql = String.format("from Product where id != %s and productCluster = %d and ProdCategory.idCategory = %d", 
+				currentProduct.getIdProduct(), 
+				result.getCluster(),
+				currentProduct.getProductCategory().getIdCategory());
+		Query query = session.createQuery(hql);
+		List<Product> listProd = query.list();
+		listProd.sort(new Comparator<Product>() {
+
+			@Override
+			public int compare(Product o1, Product o2) {
+				Double avgRating1 = 0.0;
+				if (o1.getRatings().size() != 0) {
+					for (Rating rating : o1.getRatings()) {
+						avgRating1 += rating.getRating();
+					}
+					avgRating1 /= o1.getRatings().size();
+				}
+				Double avgRating2 = 0.0;
+				if (o2.getRatings().size() != 0) {
+					for (Rating rating : o2.getRatings()) {
+						avgRating2 += rating.getRating();
+					}
+					avgRating2 /= o2.getRatings().size();
+				}
+				return avgRating1.compareTo(avgRating2);
+			}
+		});
+		return listProd;
 	}
 	
 	
@@ -55,7 +118,7 @@ public class productDAO {
 		return listCat;
 	}
 	
-	public ProductCategory getCat( String id) {
+	public ProductCategory getCat( int id) {
 		Session session = factory.getCurrentSession();
 		ProductCategory Cat = (ProductCategory) session.get(ProductCategory.class, id);
 		return Cat;
@@ -82,6 +145,23 @@ public class productDAO {
 		return list;
 	}
 	
+	public List<String> getLBrand() {
+		List<String> list = new ArrayList<String>();
+		list.add("Nike");
+		list.add("Louis Vuitton");
+		list.add("GUCCI");
+		list.add("Chanel");
+		list.add("Adidas");
+		list.add("Hermes");
+		list.add("ZARA");
+		list.add("H&M");
+		list.add("Cartier");
+		list.add("Dior");
+		list.add("UNIQLO");
+		
+		return list;
+	}
+	
 	public boolean saveProduct( Product prod) {
 		Session session = factory.openSession();
 		Transaction t = session.beginTransaction();
@@ -104,17 +184,27 @@ public class productDAO {
 			String cat,
 			String name,
 			Float price,
-			String image) {
+			String image,
+			String brand,
+			Boolean gender,
+			Integer releaseTime,
+			String productType,
+			String material) {
 		Session session = factory.openSession();
 		Transaction t = session.beginTransaction();
 		
 		
 		Product prod = (Product) session.get(Product.class, prodID);
 		
-		prod.setProductCategory(getCat(cat));
+		prod.setProductCategory(getCat(Integer.parseInt(cat)));
 		prod.setName(name);
 		prod.setPrice(price);
 		prod.setImage(image);
+		prod.setBrand(brand);
+		prod.setGender(gender);
+		prod.setReleaseTime(releaseTime);
+		prod.setProductType(productType);
+		prod.setMaterial(material);
 		
 		try {
 			session.update(prod);

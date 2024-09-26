@@ -125,7 +125,7 @@
                                 	 <c:forEach var="p" items="${prods}" begin="0" end="${prodsSize}" step="1">
 		                                <div class="col-4 product">
 											<div class="product-image">
-												<img
+												<img style="width: 100%; height: 100%;"
 													src="${p.image }"
 													alt="">
 				
@@ -169,7 +169,7 @@
 											<c:if test="${p.getProductCategory().idCategory == catID}">
 												<div class="col-4 product">
 											<div class="product-image">
-												<img
+												<img style="width: 100%; height: 100%;"
 													src="${p.image }"
 													alt="">
 				

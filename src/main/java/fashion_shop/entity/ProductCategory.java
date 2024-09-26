@@ -14,7 +14,7 @@ import javax.persistence.Table;
 public class ProductCategory {
 	@Id
 	@Column(name = "ID")
-	private String idCategory;
+	private int idCategory;
 	
 	@Column(name = "Name")
 	private String nameCategory;
@@ -30,11 +30,11 @@ public class ProductCategory {
 		this.prods = prods;
 	}
 
-	public String getIdCategory() {
+	public int getIdCategory() {
 		return idCategory;
 	}
 
-	public void setIdCategory(String idCategory) {
+	public void setIdCategory(int idCategory) {
 		this.idCategory = idCategory;
 	}
 

@@ -1,6 +1,7 @@
 package fashion_shop.controller;
 
 import java.io.File;
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -35,6 +36,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.google.gson.Gson;
+
 import fashion_shop.bean.Cart;
 import fashion_shop.entity.Account;
 import fashion_shop.entity.Order;
@@ -44,6 +47,11 @@ import fashion_shop.entity.ProductCategory;
 import fashion_shop.entity.Role;
 import fashion_shop.entity.SizeAndColor;
 import fashion_shop.entity.SizeAndColor.PK;
+import fashion_shop.model.APIResult;
+import fashion_shop.model.APIResult2;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
 import fashion_shop.DAO.accountDAO;
 import fashion_shop.DAO.adminDAO;
 import fashion_shop.DAO.productDAO;
@@ -123,18 +131,41 @@ public class AdminController {
 			@RequestParam("cat") String cat,
 			@RequestParam("name") String name,
 			@RequestParam("price") Float price, 
-			@RequestParam("image") String image) {
+			@RequestParam("image") String image,
+			@RequestParam("brand") String brand,
+			@RequestParam("gender") int gender,
+			@RequestParam("releaseTime") Integer releaseTime,
+			@RequestParam("productType") String productType,
+			@RequestParam("material") String material) throws IOException {
 		
 		Product prod = new Product();
 		prod.setIdProduct(id);
-		prod.setProductCategory(productDAL.getCat(cat));
+		prod.setProductCategory(productDAL.getCat(Integer.parseInt(cat)));
 		prod.setName(name);
 		prod.setPrice(price);
 		prod.setImage(image);
+		prod.setBrand(brand);
+		prod.setGender(gender == -1 ? null : gender == 1 ? true : false);
+		prod.setReleaseTime(releaseTime);
+		prod.setProductType(productType);
+		prod.setMaterial(material);
+		
+		model.addAttribute("listCats", productDAL.getLCat());
 		
 		if(!productDAL.saveProduct(prod)) {
 			return "admin/adminAddProd";
 		}
+		
+		String url = "http://localhost:8000/cluster";
+		OkHttpClient client = new OkHttpClient();
+	  Request request = new Request.Builder()
+	      .url(url)
+	      .build();
+
+	  Response response = client.newCall(request).execute();
+	  Gson gson = new Gson();
+	  APIResult2 result = gson.fromJson(response.body().string(), APIResult2.class);
+	  System.out.println(result.toString());
 		
 		return "redirect:/admin/adminProducts.htm";
 	}
@@ -153,6 +184,7 @@ public class AdminController {
 	/////////////Manage MIX PRODUCT
 	@RequestMapping(value="adminProd/{idProduct}", method=RequestMethod.GET)
 	public String showColorSize( ModelMap model, @PathVariable("idProduct") String id) {
+		System.out.println(productDAL.getProduct(id).toString());
 		model.addAttribute("p", productDAL.getProduct(id));
 		model.addAttribute("listC", productDAL.getLCS(id));
 		model.addAttribute("size", productDAL.getLCS(id).size());
@@ -247,10 +279,25 @@ public class AdminController {
 			@RequestParam("cat") String cat,
 			@RequestParam("name") String name,
 			@RequestParam("price") Float price, 
-			@RequestParam("image") String image) {
+			@RequestParam("image") String image,
+			@RequestParam("brand") String brand,
+			@RequestParam("gender") int gender,
+			@RequestParam("releaseTime") Integer releaseTime,
+			@RequestParam("productType") String productType,
+			@RequestParam("material") String material) throws IOException {
 
 		
-		if(productDAL.updateProduct(prodID, cat, name, price, image)) {
+		if(productDAL.updateProduct(prodID, cat, name, price, image, brand, gender == -1 ? null : gender == 1 ? true : false, releaseTime, productType, material)) {
+			String url = "http://localhost:8000/cluster";
+			OkHttpClient client = new OkHttpClient();
+		  Request request = new Request.Builder()
+		      .url(url)
+		      .build();
+	
+		  Response response = client.newCall(request).execute();
+		  Gson gson = new Gson();
+		  APIResult2 result = gson.fromJson(response.body().string(), APIResult2.class);
+		  System.out.println(result.toString());
 			return "redirect:/admin/adminProd/" + prodID +  ".htm";
 		}
 		

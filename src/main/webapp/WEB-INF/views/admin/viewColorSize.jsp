@@ -87,10 +87,11 @@
 			<table>
 					<tr>
 						<th>ID</th>
-						<th>Image</th>
-						<th>Category</th>
-						<th>Name</th>
-						<th>Price</th>
+						<th>Brand</th>
+						<th>Gender</th>
+						<th>Release time</th>
+						<th>Type</th>
+						<th>Material</th>
 					</tr>
 
 					<div class="scroll">
@@ -99,10 +100,15 @@
     	 
     							<tr>
 		                            <td>${p.idProduct }</td>
-		                            <td><img style="width: 120px; margin: 0 auto;" src="${p.image }"  ></td>
-		                            <td>${p.getProductCategory().nameCategory }</td>
-		                            <td>${p.name }</td>
-		                            <td>$${p.price }</td>
+		                            <td>${p.brand }</td>
+		                            <c:if test="${not empty p.gender }">
+		                            	<c:if test="${p.gender }"><td>Male</td></c:if>
+		                            	<c:if test="${!p.gender }"><td>Female</td></c:if>
+		                            </c:if>
+		                         	<c:if test="${empty p.gender }"><td>None</td></c:if>
+		                            <td>${p.releaseTime }</td>
+		                            <td>${p.productType }</td>
+		                            <td>${p.material }</td>
 		                        </tr> 
     					
 					</div>

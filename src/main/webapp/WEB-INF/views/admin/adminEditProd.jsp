@@ -134,6 +134,52 @@
 	                            <label for="">Image source:</label>
 	                            <input name="image" type="text" value="${p.image }" >
 	                        </div>
+	                        
+	                        <div class="col-6 field">
+	                        	<label for="">Brand:</label>
+	                        	<input type="text" name="brand" id="" placeholder="Type brand here..." value="${p.brand }">
+	                        </div>
+	                        
+	                        <div class="col-6 field">
+	                        	<label for="">Gender:</label>
+<!-- 	                        	<input type="text" name="gender" id="" placeholder="Type gender here..."> -->
+	                        	<div class="product-form">
+	                                <select name="gender" id="">
+	                                		<c:if test="${not empty p.gender }">
+	                                			<c:if test="${p.gender }">
+	                                				<option value=-1>None</option>
+		                                    		<option selected="selected" value=1>Male</option>
+		                                    		<option value=0>Female</option>
+		                                    	</c:if>
+		                                    	<c:if test="${!p.gender }">
+		                                    		<option value=-1>None</option>
+		                                    		<option value=1>Male</option>
+		                                    		<option selected="selected" value=0>Female</option>
+		                                    	</c:if>
+	                                		</c:if>
+	                                    	<c:if test="${empty p.gender }">
+	                                    		<option selected="selected" value=-1>None</option>
+	                                    		<option value=1>Male</option>
+		                                    	<option value=0>Female</option>
+	                                    	</c:if>
+	                                </select>
+	                            </div>
+	                        </div>
+	                        
+	                        <div class="col-6 field">
+	                        	<label for="">Release Time:</label>
+	                        	<input type="number" name="releaseTime" id="" placeholder="Type release time here..." value="${p.releaseTime }" }>
+	                        </div>
+	                        
+	                        <div class="col-6 field">
+	                        	<label for="">Product Type:</label>
+	                        	<input type="text" name="productType" id="" placeholder="Type product type here..." value="${p.productType }">
+	                        </div>
+	                        
+	                        <div class="col-6 field" style="position: relative;">
+	                        	<label for="">Product Material:</label>
+	                        	<input type="text" name="material" id="" placeholder="Type product Material here..." value="${p.material }">
+	                        </div>
 	
 	                    </div>
 	                </div>

@@ -37,7 +37,7 @@ pageEncoding="UTF-8"%>
             </div>
 
             <div class="desc">
-                <h2 class="title">Description</h2>
+                <h2 class="title">${product.name }</h2>
 
                 <div class="row desc-main">
                     <div class="col-6 features">
@@ -53,33 +53,38 @@ pageEncoding="UTF-8"%>
                         <h5 class="desc-title">Specifications</h5>
                         <table>
                             <tr>
+                                <th>Price</th>
+                                <td>${product.price }</td>
+
+                            </tr>
+                            <tr>
+                                <th>Brand</th>
+                                <td>${product.brand }</td>
+
+                            </tr>
+                            <tr>
+                                <th>Gender</th>
+                                <c:if test="${p.gender }"><td>Male</td></c:if>
+								<c:if test="${!p.gender }"><td>Female</td></c:if>
+                            </tr>
+                            <tr>
+                                <th>Release time</th>
+                                <td>${product.releaseTime }</td>
+
+                            </tr>
+                            <tr>
                                 <th>Material</th>
-                                <td>Praesent id enim sit amet.Tdio</td>
-                            </tr>
-                            <tr>
-                                <th>Claimed Size</th>
-                                <td>Praesent id enim sit</td>
-
-                            </tr>
-                            <tr>
-                                <th>Recommended Use</th>
-                                <td>Praesent id enim sit amet.Tdio vulputate eleifend in in tortor. ellus massa. siti</td>
-
-                            </tr>
-                            <tr>
-                                <th>Manufacturer</th>
-                                <td>Praesent id enim</td>
+                                <td>${product.material }</td>
 
                             </tr>
                         </table>
                     </div>
 
                     <div class="col-6 video-desc">
-                        <h5 class="desc-title">Video Description</h5>
+                        <h5 class="desc-title">Image</h5>
 
                         <div class="video">
-                            <img src="https://d-themes.com/html/riode/images/product/product.jpg" alt="">
-                            <a href=""><i class="fa-solid fa-play"></i></a>
+                            <img src="${product.image }" alt="">
                         </div>
 
                         <div class="row benefits">
@@ -112,17 +117,18 @@ pageEncoding="UTF-8"%>
             <section class="show-products" style="padding-bottom: 50px;">
                 <div class="container">
     
-                    Title 
                     <h4 class="title">
                         Related Products
                         <a href="home/products.htm" class="more hover-p-color">VIEW MORE <i class="fa-solid fa-arrow-right"></i></a>
                     </h4>
-    
-                    List Product Show
+                    <label for="sort-type">Order: </label>
+					<select id="sort-type">
+						<option value=""></option>
+						<option value="asc">Ascending by price</option>
+						<option value="dsc">Descending by price</option>
+					</select>
                     <div class="owl-carousel owl-theme">
-    
-                         A product 
-					<c:forEach var="p" items="${prods}" begin="0" end="15" step="3">
+					<c:forEach var="p" items="${relatedProducts}" begin="0" end="7" step="1">
 						<div class="col-4 product">
 							<div class="product-image">
 								<img
@@ -131,7 +137,7 @@ pageEncoding="UTF-8"%>
 
 								<div class="new">NEW</div>
 
-								<a href="home/detail/${p.idProduct}.htm" class="btn-view">VIEW DETAILS</a> <a
+								<a href="home/detail/${p.idProduct}.htm?history=${history.id }" class="btn-view">VIEW DETAILS</a> <a
 									href="" class="btn-add"> <i
 									class="fa-solid fa-bag-shopping"></i>
 								</a>
@@ -141,7 +147,7 @@ pageEncoding="UTF-8"%>
 								<a href="" class="product-category hover-p-color">${p.getProductCategory().nameCategory }</a>
 
 								<h2>
-									<a href="home/detail/${p.idProduct}.htm" class="product-name hover-p-color">${p.name }</a>
+									<a href="home/detail/${p.idProduct}.htm?history=${history.id }" class="product-name hover-p-color">${p.name }</a>
 								</h2>
 
 								<p class="product-price">${p.price }</p>
@@ -170,9 +176,6 @@ pageEncoding="UTF-8"%>
         </div>
     </main>
 
-    
-
-    Footer 
      <%@include file="/WEB-INF/views/footer.jsp"%>
 
 </body>
@@ -180,4 +183,49 @@ pageEncoding="UTF-8"%>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" referrerpolicy="no-referrer"></script>
     <script src="<c:url value='/resources/home/dist/js/owl.carousel.js' />"></script>
     <script src="<c:url value='/resources/home/dist/js/home.js' />"></script>
+    <script type="text/javascript">
+		$('#sort-type')
+				.change(
+						function() {
+							const sortValue = $(this).val();
+							var list = document.querySelector('.owl-stage')
+							var nodesToSort = list
+									.querySelectorAll('.owl-item');
+							if (sortValue === 'asc') {
+								Array.prototype.map
+										.call(
+												nodesToSort,
+												function(node) {
+													return {
+														node : node,
+														relevantText : parseFloat(node
+																.querySelector('.product-price').textContent)
+													};
+												}).sort(
+												function(a, b) {
+													return a.relevantText
+															- b.relevantText;
+												}).forEach(function(item) {
+											list.appendChild(item.node);
+										});
+							} else if (sortValue === 'dsc') {
+								Array.prototype.map
+										.call(
+												nodesToSort,
+												function(node) {
+													return {
+														node : node,
+														relevantText : parseFloat(node
+																.querySelector('.product-price').textContent)
+													};
+												}).sort(
+												function(a, b) {
+													return b.relevantText
+															- a.relevantText;
+												}).forEach(function(item) {
+											list.appendChild(item.node);
+										});
+							}
+						})
+	</script>
 </html>

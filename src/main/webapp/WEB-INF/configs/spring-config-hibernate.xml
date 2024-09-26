@@ -18,9 +18,9 @@
 	<bean id="dataSource" 
 	    	class="org.springframework.jdbc.datasource.DriverManagerDataSource"
 			p:driverClassName="com.microsoft.sqlserver.jdbc.SQLServerDriver"
-			p:url="jdbc:sqlserver://localhost:1433; Database=Fashion_shop"
+			p:url="jdbc:sqlserver://localhost:1433; Database=Fashion_Shop"
 			p:username="sa"
-			p:password="123456">
+			p:password="tt">
 	</bean>
 	
 	<!-- Cấu hình Hibernate -->
